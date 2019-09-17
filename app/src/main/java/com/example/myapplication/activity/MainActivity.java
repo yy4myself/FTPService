@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.NotificationManagerCompat;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -20,7 +21,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     private FrameLayout leftFrameLayout;
     private LeftFragment leftFragment;
-    private Button buttonStartFtp;
+    private Button buttonStartFtp, buttonStopFtp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,24 +45,35 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         transaction.replace(R.id.left_frame_layout, leftFragment);
         transaction.commit();
 
-        buttonStartFtp = findViewById(R.id.button_startFtpService);
+        buttonStartFtp = findViewById(R.id.button_startFtpServer);
         buttonStartFtp.setOnClickListener(this);
+        buttonStopFtp = findViewById(R.id.button_stopFtpServer);
+        buttonStopFtp.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.button_startFtpService:
+            case R.id.button_startFtpServer:
                 if (PermissionUtil.hasReadExternalStoragePermissions(this)) {
-                    Intent intent = new Intent(this, FtpService.class);
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                        startForegroundService(intent);
+                    boolean Jurisdiction = NotificationManagerCompat.from(this).areNotificationsEnabled();
+                    if (Jurisdiction == true) {
+                        Intent intent = new Intent(this, FtpService.class);
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            startForegroundService(intent);
+                        } else {
+                            startService(intent);
+                        }
                     } else {
-                        startService(intent);
+                        Toast.makeText(this, "情先开启通知", Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     Toast.makeText(this, "请先授权", Toast.LENGTH_SHORT).show();
                 }
+                break;
+            case R.id.button_stopFtpServer:
+                Intent intent = new Intent(this, FtpService.class);
+                stopService(intent);
                 break;
         }
     }
