@@ -1,5 +1,7 @@
 package com.example.myapplication.activity;
 
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
@@ -8,9 +10,9 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
-import com.example.myapplication.MyApplication;
 import com.example.myapplication.R;
 import com.example.myapplication.fragment.LeftFragment;
+import com.example.myapplication.service.FtpService;
 import com.example.myapplication.util.CommonUtil;
 import com.example.myapplication.util.PermissionUtil;
 
@@ -18,7 +20,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     private FrameLayout leftFrameLayout;
     private LeftFragment leftFragment;
-    private MyApplication myApplication;
     private Button buttonStartFtp;
 
     @Override
@@ -43,8 +44,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         transaction.replace(R.id.left_frame_layout, leftFragment);
         transaction.commit();
 
-        myApplication = (MyApplication) getApplication();
-
         buttonStartFtp = findViewById(R.id.button_startFtpService);
         buttonStartFtp.setOnClickListener(this);
     }
@@ -54,10 +53,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         switch (view.getId()) {
             case R.id.button_startFtpService:
                 if (PermissionUtil.hasReadExternalStoragePermissions(this)) {
-                    if (myApplication.initFtpService()) {
-                        myApplication.startFtpService();
+                    Intent intent = new Intent(this, FtpService.class);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        startForegroundService(intent);
                     } else {
-                        Toast.makeText(this, "请先授权", Toast.LENGTH_SHORT).show();
+                        startService(intent);
                     }
                 } else {
                     Toast.makeText(this, "请先授权", Toast.LENGTH_SHORT).show();

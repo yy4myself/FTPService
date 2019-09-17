@@ -20,7 +20,7 @@ public class PermissionUtil {
         return hasPermission(context, READ_EXTERNAL_STORAGE);
     }
 
-    public static boolean hasLocationPermissions(Context context) {
+    public static boolean hasWriteExternalStoragePermissions(Context context) {
         return hasPermission(context, WRITE_EXTERNAL_STORAGE);
     }
 
