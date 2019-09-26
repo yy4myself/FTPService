@@ -1,37 +1,36 @@
 package com.example.myapplication.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.myapplication.R;
+import com.example.myapplication.adapter.LeftAdapter;
+import com.example.myapplication.bean.ItemDataBean;
 
-public class LeftFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+import java.util.ArrayList;
+import java.util.List;
+
+public class LeftFragment extends Fragment implements LeftAdapter.ItemClickListener {
+
+    private static final String TAG = "LeftFragment";
+
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
     public LeftFragment() {
-        // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment LeftFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static LeftFragment newInstance(String param1, String param2) {
         LeftFragment fragment = new LeftFragment();
         Bundle args = new Bundle();
@@ -50,11 +49,37 @@ public class LeftFragment extends Fragment {
         }
     }
 
+    private RecyclerView recyclerViewLeft;
+    private LeftAdapter leftAdapter;
+    private List<ItemDataBean> list;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_left, container, false);
+        View view = inflater.inflate(R.layout.fragment_left, container, false);
+        recyclerViewLeft = view.findViewById(R.id.recyclerView_left);
+        list = new ArrayList<>();
+        ItemDataBean itemDataBean = new ItemDataBean(R.drawable.icon_my_wallet, "我的钱包", "钱包的Activity");
+        list.add(itemDataBean);
+        itemDataBean = new ItemDataBean(R.drawable.icon_my_journey, "我的行程", "行程的Activity");
+        list.add(itemDataBean);
+        itemDataBean = new ItemDataBean(R.drawable.icon_my_car, "我的车辆", "车辆的Activity");
+        list.add(itemDataBean);
+        itemDataBean = new ItemDataBean(R.drawable.icon_my_wallet, "我的数据", "数据的Activity");
+        list.add(itemDataBean);
+        itemDataBean = new ItemDataBean(R.drawable.icon_call_center, "客服中心", "客服的Activity");
+        list.add(itemDataBean);
+        itemDataBean = new ItemDataBean(R.drawable.icon_set, "设置", "设置的Activity");
+        list.add(itemDataBean);
+        itemDataBean = new ItemDataBean(R.drawable.car_service_order_icon, "车服务订单", "订单的Activity");
+        list.add(itemDataBean);
+        itemDataBean = new ItemDataBean(R.drawable.icon_my_wallet, "邀请乘客", "随便一个Activity");
+        list.add(itemDataBean);
+        leftAdapter = new LeftAdapter(getActivity(), list, this);
+
+        recyclerViewLeft.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+        recyclerViewLeft.setAdapter(leftAdapter);
+        return view;
     }
 
     @Override
@@ -65,5 +90,22 @@ public class LeftFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
+    }
+
+    @Override
+    public void OnItemClickListener(int position, String activityName) {
+        try {
+            Class clazz = Class.forName(activityName);
+            Intent intent = new Intent(getActivity(), clazz);
+            startActivity(intent);
+        } catch (ClassNotFoundException e) {
+            Log.e(TAG, "OnItemClickListener: " + activityName + "not exist");
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void OnItemLongClickListener(int position) {
+
     }
 }

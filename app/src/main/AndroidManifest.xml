@@ -18,7 +18,7 @@
         <service
             android:name=".service.FtpService"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true" />
 
         <activity
             android:name=".activity.MainActivity"

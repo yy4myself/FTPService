@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import com.example.ftp.FtpClient;
 import com.example.myapplication.R;
 import com.example.myapplication.fragment.LeftFragment;
 import com.example.myapplication.service.FtpService;
@@ -21,7 +22,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     private FrameLayout leftFrameLayout;
     private LeftFragment leftFragment;
-    private Button buttonStartFtp, buttonStopFtp;
+    private Button buttonStartFtp, buttonStopFtp, buttonStartFtpClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +50,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         buttonStartFtp.setOnClickListener(this);
         buttonStopFtp = findViewById(R.id.button_stopFtpServer);
         buttonStopFtp.setOnClickListener(this);
+
+        buttonStartFtpClient = findViewById(R.id.button_startFtpClient);
+        buttonStartFtpClient.setOnClickListener(this);
     }
 
     @Override
@@ -75,6 +79,16 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 Intent intent = new Intent(this, FtpService.class);
                 stopService(intent);
                 break;
+            case R.id.button_startFtpClient:
+                thread.start();
+                break;
         }
     }
+
+    Thread thread = new Thread(new Runnable() {
+        @Override
+        public void run() {
+            FtpClient.getInstance().initFTPSetting("192.168.1.74",21,"admin","admin");
+        }
+    });
 }

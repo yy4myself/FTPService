@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/relativeLayout_left"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/item_selector">
+
+    <ImageView
+        android:id="@+id/imageView_icon"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="48dp"
+        android:layout_marginTop="40dp"
+        android:background="@drawable/icon_call_center" />
+
+    <TextView
+        android:id="@+id/textView_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="40dp"
+        android:layout_toRightOf="@id/imageView_icon"
+        android:gravity="center"
+        android:text="我的钱包"
+        android:textColor="#333333"
+        android:textSize="18sp" />
+</RelativeLayout>

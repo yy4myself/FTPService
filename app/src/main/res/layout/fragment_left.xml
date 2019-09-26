@@ -11,6 +11,11 @@
         android:layout_height="200dp"
         android:layout_gravity="center"
         android:scaleType="centerInside"
-        android:src="@drawable/vehicle_img" />
+        android:src="@drawable/qr" />
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerView_left"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="20dp" />
 </LinearLayout>
